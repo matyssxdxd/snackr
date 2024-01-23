@@ -1,23 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
-import { useForm, Head } from '@inertiajs/react';
-
+import { useForm, usePage } from '@inertiajs/react';
+import { Inertia } from '@inertiajs/inertia-react';
 
 export default function Index({ auth, user }) {
-
     const { data, setData, post, processing, reset, errors } = useForm({
-        liked_user_id: user.id
+        liked_user_id: user ? user.id : null
     });
-    const handleLike = (e) => {
+
+    const [loading, setLoading] = useState(false);
+
+    const handleLike = async (e) => {
         e.preventDefault();
-        post(route('likes.store'));
-    };
+
+        try {
+            setLoading(true);
+            await post(route('likes.store'));
+            Inertia.reload(); // Manually reload the page
+        } finally {
+            setLoading(false);
+        }
+    }
+
 
     const handleDislike = (e) => {
-        e.preventDefault()
-    }
+        e.preventDefault();
+    };
 
     return (
         <AuthenticatedLayout
@@ -25,7 +35,9 @@ export default function Index({ auth, user }) {
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Index</h2>}
         >
             <div className='flex justify-center'>
-                {user && (
+                {loading ? (
+                    <p>Loading...</p>
+                ) : user ? (
                     <div key={user.id} className='bg-white p-4'>
                         <div className='bg-gray-300 h-80 w-60'>
 
@@ -54,7 +66,7 @@ export default function Index({ auth, user }) {
                             </form>
                         </div>
                     </div>
-                )}
+                ) : <div>No user</div>}
             </div>
         </AuthenticatedLayout>
     );

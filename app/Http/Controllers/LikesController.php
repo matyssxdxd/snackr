@@ -16,9 +16,15 @@ class LikesController extends Controller
      */
     public function index(): Response
     {
+        $user = Auth::user();
+        $likedUserIds = $user->likes->pluck('liked_user_id')->toArray();
+
+        $userToDisplay = User::all()->whereNotIn('id', array_merge([Auth::id()], $likedUserIds))->first();
+
         return Inertia::render('Likes/Index', [
-            'user' => User::all()->where('id', '!=', Auth::id())->first()
+            'user' => $userToDisplay
         ]);
+
     }
 
     /**
@@ -32,12 +38,27 @@ class LikesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
+        $liked_user_id = $request->input('liked_user_id');
+        $user_id = Auth::id();
 
-        $liked_user_id = $request['liked_user_id'];
+        $like = new Likes([
+            'user_id' => $user_id,
+            'liked_user_id' => $liked_user_id,
+        ]);
 
-        $request->user()->likes()->create($liked_user_id);
+        $like->save();
+
+        // Fetch a new user from the database
+        $user = Auth::user();
+        $likedUserIds = $user->likes->pluck('liked_user_id')->toArray();
+        $notAllowed = array_merge($likedUserIds, [$liked_user_id], [Auth::id()]);
+        $newUser = User::all()->whereNotIn('id', $notAllowed)->first();
+
+        return Inertia::render('Likes/Index', [
+            'user' => $newUser,
+        ]);
     }
 
     /**
