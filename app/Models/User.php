@@ -19,9 +19,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'username',
+        'pet_name',
+        'pet_age',
         'email',
         'password',
+        'picture',
     ];
 
     /**
@@ -47,5 +50,10 @@ class User extends Authenticatable
     public function likes(): HasMany
     {
         return $this->hasMany(Likes::class);
+    }
+
+    public function dislikes(): HasMany
+    {
+        return $this->hasMany(Dislikes::class);
     }
 }

@@ -7,12 +7,21 @@ import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
+    const { data, setData, post, processing, errors, reset, progress } = useForm({
+        username: '',
+        pet_name: '',
+        pet_age: '',
         email: '',
         password: '',
         password_confirmation: '',
+        picture: '',
     });
+
+    const handleFile = (e) => {
+        if (e.currentTarget.files) {
+            setData("picture", e.currentTarget.files[0]);
+        }
+    };
 
     useEffect(() => {
         return () => {
@@ -32,24 +41,68 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="username" value="Username"/>
 
                     <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
+                        id="username"
+                        name="username"
+                        value={data.username}
                         className="mt-1 block w-full"
-                        autoComplete="name"
+                        autoComplete="username"
                         isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
+                        onChange={(e) => setData('username', e.target.value)}
                         required
                     />
 
-                    <InputError message={errors.name} className="mt-2" />
+                    <InputError message={errors.username} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="pet_name" value="Pet name"/>
+
+                    <TextInput
+                        id="pet_name"
+                        name="pet_name"
+                        value={data.pet_name}
+                        className="mt-1 block w-full"
+                        autoComplete="pet_name"
+                        isFocused={true}
+                        onChange={(e) => setData('pet_name', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.pet_name} className="mt-2"/>
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="pet_age" value="Pet age"/>
+
+                    <input
+                        id="pet_age"
+                        name="pet_age"
+                        type="number"
+                        value={data.pet_age}
+                        className="mt-1 block w-full"
+                        autoComplete="pet_age"
+                        onChange={(e) => setData('pet_age', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.pet_age} className="mt-2"/>
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel input={"picture"} value={"Picture"} required={true} />
+                        <input
+                            type="file"
+                            name="picture"
+                            required={true}
+                            onChange={handleFile}
+                        />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="email" value="Email"/>
 
                     <TextInput
                         id="email"
@@ -62,11 +115,11 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <InputError message={errors.email} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Password"/>
 
                     <TextInput
                         id="password"
@@ -79,11 +132,11 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.password} className="mt-2" />
+                    <InputError message={errors.password} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
+                    <InputLabel htmlFor="password_confirmation" value="Confirm Password"/>
 
                     <TextInput
                         id="password_confirmation"
@@ -96,7 +149,7 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.password_confirmation} className="mt-2" />
+                    <InputError message={errors.password_confirmation} className="mt-2"/>
                 </div>
 
                 <div className="flex items-center justify-end mt-4">

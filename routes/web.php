@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\DislikesController;
 use App\Http\Controllers\LikesController;
+use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -17,18 +19,14 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+Route::middleware('guest')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Welcome', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+        ]);
+    })->name('welcome');
 });
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Index');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -39,6 +37,14 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/likes', [LikesController::class, 'index'])->name('likes.index');
     Route::post('/likes', [LikesController::class, 'store'])->name('likes.store');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/dislikes', [DislikesController::class, 'store'])->name('dislikes.store');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/matches', [MatchesController::class, 'index'])->name('matches.index');
 });
 
 require __DIR__.'/auth.php';
