@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/matches', [MatchesController::class, 'index'])->name('matches.index');
+    Route::get('/matches/{id}', [MatchesController::class, 'match'])->name('matches.match');
 });
 
 require __DIR__.'/auth.php';

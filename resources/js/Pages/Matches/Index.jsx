@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import InputError from '@/Components/InputError';
-import PrimaryButton from '@/Components/PrimaryButton';
-import { useForm, Head } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 
 export default function Index({ auth, matches }) {
-    console.log(matches);
 
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Index</h2>}
         >
-            <div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {matches.map((match) => (
-                    <div key={match.id} className="flex justify-center">
-                        <div className="h-96 w-auto">
-                            <img className="h-48 w-48 object-cover" src={match.picture}/>
+                    <Link key={match.id} href={`/matches/${match.id}`}>
+                        <div className="flex-col w-fit shadow-xl rounded-xl hover:scale-110 transition-all mt-10">
+                            <img className="object-cover w-48 h-48 rounded-t-xl" src="https://icatcare.org/app/uploads/2018/07/Thinking-of-getting-a-cat.png" />
+                            <div className="flex bg-white p-4 justify-center rounded-b-xl">
+                                <p className="text-black">{match.pet_name}, {match.pet_age}</p>
+                            </div>
                         </div>
-                        <p className="text-black">{match.pet_name}</p>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </AuthenticatedLayout>

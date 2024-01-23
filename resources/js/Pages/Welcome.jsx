@@ -1,5 +1,6 @@
 import { Link, Head } from '@inertiajs/react';
 import ApplicationLogo from "@/Components/ApplicationLogo.jsx";
+import NavLink from "@/Components/NavLink.jsx";
 
 export default function Welcome({}) {
     return (
@@ -17,19 +18,12 @@ export default function Welcome({}) {
                                 </div>
                             </div>
                             <div className="flex space-x-8 items-center">
-                                <Link
-                                    href={route('login')}
-                                    className=""
-                                >
-                                    Log in
-                                </Link>
-
-                                <Link
-                                    href={route('register')}
-                                    className=""
-                                >
+                                <NavLink href={route('login')} active={route().current('login')}>
+                                    Login
+                                </NavLink>
+                                <NavLink href={route('register')} active={route().current('register')}>
                                     Register
-                                </Link>
+                                </NavLink>
                             </div>
                         </div>
                     </div>

@@ -82,7 +82,7 @@ export default function Register() {
                         name="pet_age"
                         type="number"
                         value={data.pet_age}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full border-pink-300 focus:border-pink-500 focus:ring-pink-500 rounded-md shadow-sm"
                         autoComplete="pet_age"
                         onChange={(e) => setData('pet_age', e.target.value)}
                         required
@@ -97,6 +97,7 @@ export default function Register() {
                             type="file"
                             name="picture"
                             required={true}
+                            className="mt-1 mb-2 border-pink-300 focus:border-pink-500 focus:ring-pink-500 rounded-md shadow-sm "
                             onChange={handleFile}
                         />
                 </div>
